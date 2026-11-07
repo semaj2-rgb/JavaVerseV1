@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Learn Java with tutorials, examples, quizzes, and a searchable concept library.">
+<title>JavaVerse — Learn Java. Build Anything.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ============================ AUTH (signed out) ============================ -->
+<div id="authView" class="auth-wrap hidden">
+  <header class="auth-top"><a class="brand" href="/"><span class="brand-mark">J<span>V</span></span><span>Java<span class="brand-light">Verse</span></span></a></header>
+  <section class="auth-layout">
+    <div class="intro">
+      <div class="eyebrow"><span class="eyebrow-dot"></span> LEARN • CODE • BUILD</div>
+      <h1>Think in code.<br><span>Build with Java.</span></h1>
+      <p>Tutorials, practice challenges, a quiz, and a searchable library of Java concepts. Sign in with your account to continue.</p>
+      <div class="feature-list">
+        <div>☕ <span><b>Java learning path</b><small>12 lessons from your first program to OOP</small></span></div>
+        <div>⌕ <span><b>Concept library</b><small>Definitions, syntax and examples, including Math.pow() and Math.sqrt()</small></span></div>
+        <div>⚡ <span><b>Timed access</b><small>Access keys for 1, 30, or 365 days</small></span></div>
+      </div>
+    </div>
+    <div class="auth-card">
+      <div class="tabs"><button class="tab active" data-auth-tab="signin">Sign in</button><button class="tab" data-auth-tab="signup">Create account</button></div>
+      <div id="authMessage" class="message hidden" role="status"></div>
+      <form id="signinForm">
+        <h2>Welcome back</h2><p class="muted">Sign in to your JavaVerse account.</p>
+        <label>Username or email<input name="identifier" autocomplete="username" required placeholder="you@example.com"></label>
+        <label>Password<input name="password" type="password" autocomplete="current-password" required placeholder="Your password"></label>
+        <button class="btn btn-primary full" type="submit">Sign in →</button>
+        <small class="form-note">Access must be active to sign in.</small>
+      </form>
+      <form id="signupForm" class="hidden">
+        <h2>Create your account</h2><p class="muted">An unused access key is required to register.</p>
+        <label>Username<input name="username" autocomplete="username" required minlength="3" maxlength="24" placeholder="java_learner"></label>
+        <label>Email address<input name="email" type="email" autocomplete="email" required placeholder="you@example.com"></label>
+        <label>Password <small>(10 characters minimum)</small><input name="password" type="password" autocomplete="new-password" required minlength="10" maxlength="128" placeholder="Create a strong password"></label>
+        <label>Access key<input name="accessKey" required autocomplete="off" placeholder="Paste the key provided by admin"></label>
+        <button class="btn btn-primary full" type="submit">Create account →</button>
+        <small class="form-note">Each key can be used once. Your access period starts when you register.</small>
+      </form>
+    </div>
+  </section>
+</div>
+
+<!-- ============================ APP (signed in) ============================ -->
+<div class="app-shell hidden" id="appShell">
+  <aside class="sidebar" id="sidebar">
+    <a class="brand" href="#home" aria-label="JavaVerse home">
+      <span class="brand-mark">J<span>V</span></span>
+      <span>Java<span class="brand-light">Verse</span><small>LEARN • CODE • BUILD</small></span>
+    </a>
+    <div class="side-label">WORKSPACE</div>
+    <nav class="side-nav" aria-label="Main navigation">
+      <a href="#home" class="nav-link active" data-page="home"><span>⌂</span> Overview</a>
+      <a href="#learn" class="nav-link" data-page="learn"><span>▤</span> Learn Java</a>
+      <a href="#playground" class="nav-link" data-page="playground"><span>⌘</span> Code playground</a>
+      <a href="#practice" class="nav-link" data-page="practice"><span>⚡</span> Practice</a>
+      <a href="#quiz" class="nav-link" data-page="quiz"><span>☷</span> Quick quiz</a>
+      <a href="#reference" class="nav-link" data-page="reference"><span>⌕</span> Java concepts</a>
+      <a href="#projects" class="nav-link" data-page="projects"><span>▣</span> Projects</a>
+    </nav>
+
+    <div class="side-label side-label-gap">ACCOUNT</div>
+    <nav class="side-nav">
+      <a href="#profile" class="nav-link" data-page="profile"><span>◉</span> My profile</a>
+    </nav>
+
+    <div id="adminNav" class="hidden">
+      <div class="side-label side-label-gap">ADMIN PANEL</div>
+      <nav class="side-nav" aria-label="Admin navigation">
+        <a href="#admin" class="nav-link" data-page="admin"><span>▦</span> Dashboard</a>
+        <a href="#admin-keys" class="nav-link" data-page="admin-keys"><span>✦</span> Key generator</a>
+        <a href="#admin-users" class="nav-link" data-page="admin-users"><span>☰</span> Users</a>
+      </nav>
+    </div>
+
+    <div class="sidebar-bottom">
+      <div class="streak-card" id="accessCard"><div class="streak-icon">⏱</div><div><strong id="accessCardTitle">Access</strong><p id="accessCardText">—</p></div></div>
+      <div class="profile"><div class="avatar" id="sideAvatar">JV</div><div><strong id="sideName">Learner</strong><small id="sideRole">Student</small></div><button id="signoutBtn" title="Sign out" aria-label="Sign out">⏻</button></div>
+    </div>
+  </aside>
+
+  <main class="main-area">
+    <header class="topbar">
+      <button class="mobile-menu" id="menuToggle" aria-label="Toggle menu">☰</button>
+      <div class="breadcrumb"><span>JavaVerse</span><span class="crumb-slash">/</span><strong id="currentSection">Overview</strong></div>
+      <div class="topbar-right"><span class="status-dot"></span><span class="online-label" id="topbarLabel">Your learning space</span><button class="search-shortcut" id="focusSearch">⌕ <span>Search lessons</span><kbd>/</kbd></button></div>
+    </header>
+
+    <div class="page-wrap">
+
+      <!-- OVERVIEW -->
+      <section class="page active" id="page-home">
+        <div class="hero">
+          <div class="hero-copy">
+            <div class="eyebrow"><span class="eyebrow-dot"></span> YOUR JAVA JOURNEY STARTS HERE</div>
+            <h1>Think in code.<br><span>Build with Java.</span></h1>
+            <p>Learn one of the world's most widely used programming languages, one clear concept at a time.</p>
+            <div class="hero-actions"><a href="#learn" class="btn btn-primary">Start learning <span>↗</span></a><a href="#reference" class="btn btn-secondary">Browse concepts <span>⌕</span></a></div>
+            <div class="hero-meta"><div class="mini-avatars"><span>J</span><span>17</span><span>+</span></div><span>From first program to real projects</span></div>
+          </div>
+          <div class="hero-visual">
+            <div class="orbit orbit-one"></div><div class="orbit orbit-two"></div>
+            <div class="java-symbol"><span>♨</span><small>JAVA</small></div>
+            <div class="floating-chip chip-top"><span class="chip-dot orange"></span> Object-oriented</div>
+            <div class="floating-chip chip-bottom"><span class="chip-dot green"></span> Write once, run anywhere</div>
+            <div class="visual-code"><span class="code-dim">01</span> <span class="code-purple">public class</span> <span class="code-yellow">Hello</span> {<br><span class="code-dim">02</span> &nbsp; <span class="code-purple">public static void</span> main(String[] args) {<br><span class="code-dim">03</span> &nbsp;&nbsp;&nbsp; System.out.println(<span class="code-green">"Hello, Java!"</span>);<br><span class="code-dim">04</span> &nbsp; }<br><span class="code-dim">05</span> }</div>
+          </div>
+        </div>
+
+        <div class="section-heading"><div><div class="eyebrow">YOUR WORKSPACE</div><h2>Your learning dashboard</h2></div><span class="muted small">Progress saves on this device</span></div>
+        <div class="stats-grid">
+          <article class="stat-card"><div class="stat-top"><span>LESSONS COMPLETED</span><span class="stat-icon purple">▤</span></div><div class="stat-number" id="lessonCount">0 <small>/ 12</small></div><div class="progress-track"><span id="lessonProgress" style="width:0%"></span></div><p>Build your foundation</p></article>
+          <article class="stat-card"><div class="stat-top"><span>QUIZ BEST SCORE</span><span class="stat-icon orange">✳</span></div><div class="stat-number" id="bestScore">— <small>/ 5</small></div><div class="stat-note">Try a quick quiz to get started.</div></article>
+          <article class="stat-card"><div class="stat-top"><span>CHALLENGES SOLVED</span><span class="stat-icon green">⚡</span></div><div class="stat-number" id="challengeCount">0</div><div class="stat-note">Practice makes progress.</div></article>
+        </div>
+
+        <div class="section-heading section-heading-spaced"><div><div class="eyebrow">A GOOD PLACE TO BEGIN</div><h2>Continue your journey</h2></div><a class="text-link" href="#learn">All lessons <span>→</span></a></div>
+        <div class="lesson-grid" id="featuredLessons"></div>
+        <div class="bottom-callout"><div class="callout-icon">⌕</div><div><strong>Need a quick definition?</strong><p>Search the concept library for Java terms, syntax and examples, for instance <code>Math.pow()</code> or <code>Math.sqrt()</code>.</p></div><a href="#reference" class="btn btn-secondary">Open concepts →</a></div>
+      </section>
+
+      <!-- LEARN -->
+      <section class="page" id="page-learn">
+        <div class="page-intro"><div class="eyebrow">THE LEARNING PATH</div><h1>Learn Java<span>.</span></h1><p>Start with the fundamentals, then work your way toward object-oriented programming and beyond.</p></div>
+        <div class="toolbar"><label class="search-box"><span>⌕</span><input id="lessonSearch" type="search" placeholder="Search lessons, concepts, keywords..."></label><select id="levelFilter" aria-label="Filter by level"><option value="All">All levels</option><option value="Beginner">Beginner</option><option value="Intermediate">Intermediate</option></select></div>
+        <div class="lesson-list" id="allLessons"></div>
+        <div class="lesson-detail hidden" id="lessonDetail"></div>
+      </section>
+
+      <!-- PLAYGROUND -->
+      <section class="page" id="page-playground">
+        <div class="page-intro"><div class="eyebrow">EXPERIMENT & EXPLORE</div><h1>Code playground<span>.</span></h1><p>Edit the sample Java code and explore how a program is structured.</p></div>
+        <div class="notice"><span>ⓘ</span><div><strong>Demo editor — no Java compiler connected</strong><p>The Run button demonstrates output for the built-in sample programs. It does not compile arbitrary Java code. Connect a real Java execution backend, or run Java locally with a JDK, to execute custom programs.</p></div></div>
+        <div class="playground">
+          <div class="editor-panel"><div class="panel-top"><div class="window-dots"><i></i><i></i><i></i></div><span> Main.java</span><select id="sampleSelect" aria-label="Choose code sample"><option value="hello">Hello World</option><option value="variables">Variables</option><option value="loop">For loop</option><option value="condition">If / else</option><option value="method">Methods</option></select></div><textarea id="codeEditor" spellcheck="false" aria-label="Java code editor"></textarea><div class="editor-footer"><span><span class="status-dot"></span> Java syntax sample</span><div><button class="btn btn-quiet" id="resetCode">Reset</button><button class="btn btn-primary" id="runCode">▶ Run demo</button></div></div></div>
+          <div class="output-panel"><div class="panel-top"><span class="output-title"><span class="terminal-icon">›_</span> Console output</span><button id="clearOutput" class="icon-button" title="Clear output">⌫</button></div><pre id="consoleOutput"><span class="output-muted">Output will appear here when you run a sample.</span></pre><div class="output-bottom"><span class="status-dot"></span> Demo mode <span class="muted">•</span> No external compiler</div></div>
+        </div>
+        <div class="tip-card"><span>✦</span><div><strong>Tip: Read the code from top to bottom.</strong><p>Java applications often define a class, then a <code>main</code> method where execution begins.</p></div></div>
+      </section>
+
+      <!-- PRACTICE -->
+      <section class="page" id="page-practice">
+        <div class="page-intro"><div class="eyebrow">LEARN BY DOING</div><h1>Practice arena<span>.</span></h1><p>Small challenges help turn Java concepts into real skills.</p></div>
+        <div class="challenge-grid" id="challengeGrid"></div>
+        <div class="challenge-detail hidden" id="challengeDetail"></div>
+      </section>
+
+      <!-- QUIZ -->
+      <section class="page" id="page-quiz">
+        <div class="page-intro"><div class="eyebrow">CHECK YOUR KNOWLEDGE</div><h1>Quick quiz<span>.</span></h1><p>Five questions, instant feedback, and explanations to help you learn.</p></div>
+        <div class="quiz-card" id="quizCard">
+          <div class="quiz-top"><span class="pill">JAVA FUNDAMENTALS</span><span id="quizProgressText">QUESTION 1 OF 5</span></div>
+          <div class="quiz-progress"><span id="quizProgressBar"></span></div>
+          <div id="quizContent"></div>
+        </div>
+      </section>
+
+      <!-- CONCEPTS -->
+      <section class="page" id="page-reference">
+        <div class="page-intro"><div class="eyebrow">QUICK LOOKUP</div><h1>Java concepts<span>.</span></h1><p>Look up Java terms, built-in methods, syntax, and examples. Try <code>Math.pow()</code> or <code>Math.sqrt()</code>.</p></div>
+        <div class="concept-tools"><input id="conceptSearch" type="search" placeholder="Search: Math.sqrt, loops, arrays…" aria-label="Search Java concepts"><select id="conceptCategory" aria-label="Filter concepts by category"><option value="all">All categories</option></select><span class="concept-count" id="conceptCount">0 concepts</span></div>
+        <div class="concept-grid" id="conceptsGrid"></div>
+        <p class="concept-footnote">Tip: Java is case-sensitive. Write <code>Math.sqrt(25)</code>, not <code>math.sqrt(25)</code>. The class name <code>Math</code> starts with a capital M.</p>
+      </section>
+
+      <!-- PROJECTS -->
+      <section class="page" id="page-projects">
+        <div class="page-intro"><div class="eyebrow">MAKE SOMETHING REAL</div><h1>Mini projects<span>.</span></h1><p>Use what you learn to build small programs that solve problems.</p></div>
+        <div class="project-grid" id="projectGrid"></div>
+      </section>
+
+      <!-- PROFILE -->
+      <section class="page" id="page-profile">
+        <div class="page-intro"><div class="eyebrow">YOUR ACCOUNT</div><h1>My profile<span>.</span></h1><p>Your account details and access period.</p></div>
+        <div class="profile-grid">
+          <div class="panel profile-card">
+            <div class="profile-head"><div class="avatar avatar-lg" id="profAvatar">JV</div><div><h2 id="profName">—</h2><p class="muted" id="profEmail">—</p><span class="status-badge" id="profStatus">Active</span></div></div>
+            <dl class="info-list">
+              <div><dt>Username</dt><dd id="profUsername">—</dd></div>
+              <div><dt>Email</dt><dd id="profEmail2">—</dd></div>
+              <div><dt>Account type</dt><dd id="profRole">—</dd></div>
+              <div><dt>Access plan</dt><dd id="profPlan">—</dd></div>
+              <div><dt>Member since</dt><dd id="profCreated">—</dd></div>
+              <div><dt>Last sign-in</dt><dd id="profLast">—</dd></div>
+            </dl>
+          </div>
+          <div class="panel access-panel">
+            <small class="label-caps">ACCESS EXPIRES</small>
+            <div class="access-big" id="profExpiry">—</div>
+            <div class="access-left" id="profLeft">—</div>
+            <div class="progress-track"><span id="profBar" style="width:0%"></span></div>
+            <p class="muted small" id="profNote">Need more time? Ask the administrator for a new key or an extension.</p>
+          </div>
+        </div>
+        <form id="passwordForm" class="panel pw-panel">
+          <h3>Change password</h3><p class="muted">You will stay signed in on this device. Other devices are signed out.</p>
+          <div id="pwMessage" class="message hidden"></div>
+          <div class="form-row">
+            <label>Current password<input name="currentPassword" type="password" autocomplete="current-password" required></label>
+            <label>New password <small>(10+ characters)</small><input name="newPassword" type="password" autocomplete="new-password" required minlength="10" maxlength="128"></label>
+          </div>
+          <button class="btn btn-primary" type="submit">Update password</button>
+        </form>
+        <div class="panel pw-panel"><h3>Learning progress</h3><p class="muted">Lessons, challenges and quiz scores are saved in this browser for your account.</p><button class="btn btn-quiet" id="resetProgress">↻ Reset my progress</button></div>
+      </section>
+
+      <!-- ADMIN: DASHBOARD -->
+      <section class="page" id="page-admin">
+        <div class="page-intro admin-intro"><div><div class="eyebrow">ADMINISTRATION</div><h1>Admin dashboard<span>.</span></h1><p>Overview of accounts, keys, and recent admin actions.</p></div><span class="admin-badge">ADMIN</span></div>
+        <div class="stats-grid stats-4" id="adminStats"></div>
+        <div class="panel mt"><div class="panel-heading"><div><h3>Quick actions</h3></div></div><div class="detail-actions"><a class="btn btn-primary" href="#admin-keys">✦ Generate keys</a><a class="btn btn-secondary" href="#admin-users">Manage users</a><button class="btn btn-quiet" id="refreshAdmin">Refresh data</button></div></div>
+        <div class="panel mt"><div class="panel-heading"><div><h3>Recent admin activity</h3><p class="muted">Last 30 actions</p></div></div><div class="table-wrap"><table><thead><tr><th>When</th><th>Action</th><th>User</th><th>Detail</th></tr></thead><tbody id="logTable"><tr><td colspan="4">Loading…</td></tr></tbody></table></div></div>
+      </section>
+
+      <!-- ADMIN: KEYS -->
+      <section class="page" id="page-admin-keys">
+        <div class="page-intro admin-intro"><div><div class="eyebrow">ADMINISTRATION</div><h1>Key generator<span>.</span></h1><p>Create single-use registration keys. The access period starts when the key is redeemed.</p></div><span class="admin-badge">ADMIN</span></div>
+        <div class="admin-grid">
+          <form id="keyForm" class="panel">
+            <h3>Generate access keys</h3><p class="muted">Full keys are shown once. Copy them and share privately.</p>
+            <label>Access duration<select name="durationDays"><option value="1">1 day</option><option value="30" selected>30 days</option><option value="365">12 months (365 days)</option></select></label>
+            <label>How many keys<select name="quantity"><option>1</option><option>2</option><option>3</option><option>5</option><option>10</option></select></label>
+            <label>Note (optional)<input name="note" maxlength="100" placeholder="e.g. Student payment #12"></label>
+            <button class="btn btn-primary full" type="submit">✦ Generate</button>
+            <div id="newKeyBox" class="new-key hidden"><small>NEW KEY<span id="newKeyPlural"></span> — COPY NOW</small><div id="newKeyList"></div><button type="button" id="copyKey" class="btn btn-secondary full">Copy</button><p class="muted">These keys will not be shown again after you leave this page.</p></div>
+          </form>
+          <div class="panel"><div class="panel-heading"><div><h3>Access keys</h3><p class="muted">Most recent 200 keys</p></div><button class="btn btn-secondary small-btn" id="refreshKeys">Refresh</button></div><div class="table-wrap"><table><thead><tr><th>Key</th><th>Duration</th><th>Status</th><th>Created</th><th>Note</th><th></th></tr></thead><tbody id="keysTable"><tr><td colspan="6">Loading…</td></tr></tbody></table></div></div>
+        </div>
+      </section>
+
+      <!-- ADMIN: USERS -->
+      <section class="page" id="page-admin-users">
+        <div class="page-intro admin-intro"><div><div class="eyebrow">ADMINISTRATION</div><h1>Users<span>.</span></h1><p>Extend or deduct access time, or ban accounts.</p></div><span class="admin-badge">ADMIN</span></div>
+        <div class="toolbar"><label class="search-box"><span>⌕</span><input id="userSearch" type="search" placeholder="Search username or email..."></label><select id="userFilter" aria-label="Filter users"><option value="all">All users</option><option value="active">Active</option><option value="expired">Expired</option><option value="banned">Banned</option></select></div>
+        <div class="panel"><div class="table-wrap"><table><thead><tr><th>User</th><th>Email</th><th>Plan</th><th>Access expires</th><th>Status</th><th></th></tr></thead><tbody id="usersTable"><tr><td colspan="6">Loading…</td></tr></tbody></table></div></div>
+      </section>
+
+    </div>
+    <footer class="footer"><span>© 2026 JavaVerse</span><span>Made for curious minds <span class="footer-heart">♥</span></span><a href="https://dev.java/learn/" target="_blank" rel="noreferrer">Official Java learning resources ↗</a></footer>
+  </main>
+</div>
+
+<!-- Manage-user modal (admin) -->
+<div class="modal-back hidden" id="userModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal">
+    <div class="modal-head"><div><div class="eyebrow">MANAGE USER</div><h2 id="modalTitle">—</h2><p class="muted" id="modalSub">—</p></div><button class="btn btn-quiet" id="modalClose" aria-label="Close">✕</button></div>
+    <div id="modalMessage" class="message hidden"></div>
+    <dl class="info-list compact" id="modalInfo"></dl>
+    <div class="modal-section">
+      <h3>Adjust access time</h3>
+      <div class="adjust-row">
+        <select id="adjAction"><option value="extend">Extend (+)</option><option value="deduct">Deduct (−)</option></select>
+        <input id="adjAmount" type="number" min="1" step="1" value="1" aria-label="Amount">
+        <select id="adjUnit"><option value="days">days</option><option value="hours">hours</option></select>
+        <button class="btn btn-primary" id="adjApply">Apply</button>
+      </div>
+      <div class="quick-chips"><button class="chip" data-q="extend:1:days">+1 day</button><button class="chip" data-q="extend:30:days">+30 days</button><button class="chip" data-q="extend:365:days">+12 months</button><button class="chip" data-q="deduct:1:days">−1 day</button><button class="chip" data-q="deduct:30:days">−30 days</button></div>
+      <p class="muted small">Deducting more than the remaining time expires the account immediately. Extending an expired account restarts from now.</p>
+    </div>
+    <div class="modal-section danger-zone">
+      <h3 id="banHeading">Ban account</h3>
+      <label id="banReasonWrap">Reason (shown to the user)<input id="banReason" maxlength="200" placeholder="e.g. Shared key with others"></label>
+      <button class="btn btn-danger" id="banBtn">Ban this account</button>
+      <p class="muted small" id="banNote">Banning signs the user out immediately and blocks sign-in until you unban them.</p>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script src="app.js"></script>
+</body>
+</html>
